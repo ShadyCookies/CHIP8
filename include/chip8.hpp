@@ -6,8 +6,8 @@
 #define GPR_COUNT 16
 #define STACK_COUNT 16
 #define KEY_COUNT 16
-#define SCREEN_ROWS 64
-#define SCREEN_COLUMNS 48
+#define SCREEN_ROWS 32
+#define SCREEN_COLUMNS 64
 
 enum
 {

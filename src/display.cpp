@@ -64,6 +64,8 @@ void UIEventPoll(uint8_t *keys)
 
 void displayGraphics(SDL_Renderer *renderer, uint8_t *screen, int nRows, int nColumns)
 {
+    // std::cout << "drawing!\n";
+    // SDL_RenderDrawPoint(renderer, nColumns / 2, nRows / 2);
     for (int i = 0; i < nRows * nColumns; i++)
     {
         int drawColor = screen[i];
@@ -80,7 +82,7 @@ void displayGraphics(SDL_Renderer *renderer, uint8_t *screen, int nRows, int nCo
 void setupGraphics(SDL_Window *window, SDL_Renderer *renderer, int nRows, int nColumns)
 {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(nRows * 16, nColumns * 16, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(nColumns * SCALING_FACTOR, nRows * SCALING_FACTOR, 0, &window, &renderer);
     SDL_RenderSetScale(renderer, SCALING_FACTOR, SCALING_FACTOR);
 }
 

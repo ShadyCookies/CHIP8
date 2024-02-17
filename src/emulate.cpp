@@ -19,7 +19,7 @@ void CHIP8::emulateCycle()
 
     // Decode
     uint8_t opcodeNib = instrCode >> 12; // instrCode[15:12] gives a general idea of the instrType
-    std::cout << std::hex << int(PCReg) << " : " << std::setw(2) << std::setfill('0') << int(instrCode) << "   " << std::endl;
+    // std::cout << std::hex << int(PCReg) << " : " << std::setw(2) << std::setfill('0') << int(instrCode) << "   " << std::endl;
     // std::cout << std::hex << "V9 = " << int(VReg[V9]) << ", VA = " << int(VReg[VA]) << ", VE = " << int(VReg[VE]) << std::endl;
     switch (opcodeNib)
     {
@@ -370,6 +370,18 @@ void CHIP8::emulateCycle()
         // BEEP!
         --soundTimer;
     }
+
+    // for (int row = 0; row < SCREEN_ROWS; row++)
+    // {
+    //     for (int column = 0; column < SCREEN_COLUMNS; column++)
+    //     {
+    //         if ((column + row * SCREEN_COLUMNS) % SCREEN_COLUMNS == 0 && row != 0)
+    //             std::cout << "\n";
+    //         std::cout << int(screen[column + row * SCREEN_COLUMNS]);
+    //     }
+    // }
+
+    // std::cout << "\n\n";
 
     if (isSeqPC == true)
         PCReg = PCReg + 2;

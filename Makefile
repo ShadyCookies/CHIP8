@@ -11,3 +11,9 @@ build:
 run: build
 	.\bin\main.exe
 .PHONY: run
+
+debug:
+	cp $(libs) bin
+	g++ -o bin\main.exe $(incl) $(src_files) $(libs) -g
+	gdb .\bin\main.exe
+.PHONY: debug
