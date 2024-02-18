@@ -27,17 +27,12 @@ void CHIP8::initialise()
 
     PCReg = PC_START;
     IReg = 0;
-    stackPtr = 0;
+    // stackPtr = 0;
 
     // Clear display
     for (uint16_t i = 0; i < SCREEN_ROWS * SCREEN_COLUMNS; i++)
     {
         screen[i] = 0;
-    }
-    // Clear stack
-    for (uint16_t i = 0; i < STACK_COUNT; i++)
-    {
-        stack[i] = 0;
     }
     // Clear registers V0-VF
     for (uint16_t i = 0; i < GPR_COUNT; i++)
@@ -82,7 +77,7 @@ uint8_t *CHIP8::getScreen()
 void CHIP8::loadGame(char *ROM)
 {
     std::ifstream gameBinary(ROM, std::ios::binary);
-    std::ofstream gameHex("hexCodes.txt", std::ios::binary);
+    std::ofstream gameHex("hexCodes.txt", std::ios::binary); // Only for diagnostics, not used in the program
 
     char byte;
     uint16_t memPtr = PC_START;
@@ -90,6 +85,8 @@ void CHIP8::loadGame(char *ROM)
     while (gameBinary.get(byte))
     {
         memory[memPtr] = byte;
+        if (memPtr % 2 == 0)
+            gameHex << std::hex << memPtr << " : ";
         gameHex << std::hex << std::setw(2) << std::setfill('0') << int(memory[memPtr]);
         if (memPtr % 2 == 1)
         {

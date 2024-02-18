@@ -1,10 +1,11 @@
 #pragma once
 
 #include <stdint.h>
+#include <stack>
 
 #define MEMORY_MAX 4096
 #define GPR_COUNT 16
-#define STACK_COUNT 16
+#define STACK_COUNT 32
 #define KEY_COUNT 16
 #define SCREEN_ROWS 32
 #define SCREEN_COLUMNS 64
@@ -60,8 +61,7 @@ class CHIP8
     uint8_t VReg[GPR_COUNT];
     uint16_t IReg;
     uint16_t PCReg;
-    uint16_t stack[STACK_COUNT];
-    uint8_t stackPtr;
+    std::stack<uint16_t> stack;
     uint8_t delayTimer, soundTimer;
     uint8_t keys[KEY_COUNT];
     uint8_t screen[SCREEN_ROWS * SCREEN_COLUMNS];

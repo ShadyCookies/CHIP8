@@ -20,7 +20,7 @@ void CHIP8::emulateCycle()
     // Decode
     uint8_t opcodeNib = instrCode >> 12; // instrCode[15:12] gives a general idea of the instrType
     // std::cout << std::hex << int(PCReg) << " : " << std::setw(2) << std::setfill('0') << int(instrCode) << "   " << std::endl;
-    // std::cout << std::hex << "V9 = " << int(VReg[V9]) << ", VA = " << int(VReg[VA]) << ", VE = " << int(VReg[VE]) << std::endl;
+    // std::cout << std::hex << "V0 = " << int(VReg[V0]) << std::endl;
     switch (opcodeNib)
     {
     case 0x0:
@@ -34,8 +34,8 @@ void CHIP8::emulateCycle()
         }
         else if (instrCode == 0x00EE) // RET - return from subroutine
         {
-            PCReg = stack[stackPtr];
-            stackPtr--;
+            PCReg = stack.top();
+            stack.pop();
 
             isSeqPC = false;
         }
@@ -53,8 +53,7 @@ void CHIP8::emulateCycle()
     {
         uint16_t NNN = instrCode & 0x0FFF; // NNN
 
-        stackPtr++;
-        stack[stackPtr] = PCReg;
+        stack.push(PCReg + 2);
         PCReg = NNN;
 
         isSeqPC = false;
@@ -63,7 +62,7 @@ void CHIP8::emulateCycle()
     case 0x3: // SE - skip next instr if Vx == kk
     {
         uint8_t Vx = (instrCode >> 8) & 0x0F;
-        uint8_t kk = instrCode & 0xFF;
+        uint8_t kk = instrCode & 0x00FF;
 
         if (VReg[Vx] == kk)
         {
@@ -79,7 +78,7 @@ void CHIP8::emulateCycle()
     case 0x4: // SNE - skip next instr if Vx != kk
     {
         uint8_t Vx = (instrCode >> 8) & 0x0F;
-        uint8_t kk = instrCode & 0xFF;
+        uint8_t kk = instrCode & 0x00FF;
 
         if (VReg[Vx] != kk)
         {
@@ -96,15 +95,19 @@ void CHIP8::emulateCycle()
     {
         uint8_t Vx = (instrCode >> 8) & 0x0F;
         uint8_t Vy = (instrCode >> 4) & 0x00F;
+        uint8_t func4 = instrCode & 0x000F;
 
-        if (VReg[Vx] == VReg[Vy])
+        if (func4 == 0)
         {
-            PCReg = PCReg + 4;
-            isSeqPC = false;
-        }
-        else
-        {
-            isSeqPC = true;
+            if (VReg[Vx] == VReg[Vy])
+            {
+                PCReg = PCReg + 4;
+                isSeqPC = false;
+            }
+            else
+            {
+                isSeqPC = true;
+            }
         }
     }
     break;
@@ -193,15 +196,19 @@ void CHIP8::emulateCycle()
     {
         uint8_t Vx = (instrCode >> 8) & 0x0F;
         uint8_t Vy = (instrCode >> 4) & 0x00F;
+        uint8_t func4 = instrCode & 0x000F;
 
-        if (VReg[Vx] != VReg[Vy])
+        if (func4 == 0)
         {
-            PCReg = PCReg + 4;
-            isSeqPC = false;
-        }
-        else
-        {
-            isSeqPC = true;
+            if (VReg[Vx] != VReg[Vy])
+            {
+                PCReg = PCReg + 4;
+                isSeqPC = false;
+            }
+            else
+            {
+                isSeqPC = true;
+            }
         }
     }
     break;
@@ -358,7 +365,6 @@ void CHIP8::emulateCycle()
     }
     break;
     }
-    // Update timers
 
     if (delayTimer > 0)
     {
@@ -370,18 +376,6 @@ void CHIP8::emulateCycle()
         // BEEP!
         --soundTimer;
     }
-
-    // for (int row = 0; row < SCREEN_ROWS; row++)
-    // {
-    //     for (int column = 0; column < SCREEN_COLUMNS; column++)
-    //     {
-    //         if ((column + row * SCREEN_COLUMNS) % SCREEN_COLUMNS == 0 && row != 0)
-    //             std::cout << "\n";
-    //         std::cout << int(screen[column + row * SCREEN_COLUMNS]);
-    //     }
-    // }
-
-    // std::cout << "\n\n";
 
     if (isSeqPC == true)
         PCReg = PCReg + 2;
