@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stack>
+#include <string>
 
 #define MEMORY_MAX 4096
 #define GPR_COUNT 16
@@ -68,7 +69,7 @@ class CHIP8
 
 public:
     void initialise();
-    void loadGame(char *ROM);
+    void loadGame(std::string);
     void emulateCycle();
     uint8_t *getMemory();
     uint8_t *getKeys();

@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iomanip>
+#include <string>
 
 #include "chip8.hpp"
 
@@ -27,7 +28,6 @@ void CHIP8::initialise()
 
     PCReg = PC_START;
     IReg = 0;
-    // stackPtr = 0;
 
     // Clear display
     for (uint16_t i = 0; i < SCREEN_ROWS * SCREEN_COLUMNS; i++)
@@ -74,7 +74,7 @@ uint8_t *CHIP8::getScreen()
     return screen;
 }
 
-void CHIP8::loadGame(char *ROM)
+void CHIP8::loadGame(std::string ROM)
 {
     std::ifstream gameBinary(ROM, std::ios::binary);
     std::ofstream gameHex("hexCodes.txt", std::ios::binary); // Only for diagnostics, not used in the program
