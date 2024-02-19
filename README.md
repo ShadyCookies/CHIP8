@@ -9,3 +9,11 @@ Any ROM you wish to run must be in the .ch8 format and be placed in the ROMS/ fo
 ```cpp
   make run  
 ```
+### Sample Roms:
+- OctoJam Title:
+
+![Alt Text](https://media.giphy.com/media/xYPBKti7x4O7sqBXWH/giphy.gif)
+
+- Flight Game:
+
+![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZm9sN3h0OG1nZzhuM3VicHRzNjBsMXo4Z3U4dWlkbzg0NjY1cXRyZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SaEnwPJvTCdzXfOA8D/giphy.gif)
