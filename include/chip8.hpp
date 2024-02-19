@@ -6,7 +6,6 @@
 
 #define MEMORY_MAX 4096
 #define GPR_COUNT 16
-#define STACK_COUNT 32
 #define KEY_COUNT 16
 #define SCREEN_ROWS 32
 #define SCREEN_COLUMNS 64

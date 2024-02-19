@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <string>
 
+#define delayEnabled true
+
 int main()
 {
     CHIP8 CHIP8Sys;
@@ -34,7 +36,8 @@ int main()
         displayGraphics(renderer, myscreen, SCREEN_ROWS, SCREEN_COLUMNS);
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(2);
+        if (delayEnabled)
+            SDL_Delay(2);
     }
     closeGraphics(window);
     return 0;

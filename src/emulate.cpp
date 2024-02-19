@@ -1,6 +1,5 @@
 #include <iomanip>
 #include <iostream>
-#include <chrono>
 
 #include "chip8.hpp"
 #include "display.hpp"
@@ -18,10 +17,10 @@ void CHIP8::emulateCycle()
     // Fetch
     // Fetch must be done twice as instr is 16 bit but memory is only 8 bit wide
     // Push first byte to 15:8 position, then combine with 7:0 to get full instr
+
     uint16_t instrCode = (memory[PCReg] << 8) | memory[PCReg + 1];
     bool isSeqPC = true; // flag to check if we should fetch next sequential instr or not
 
-    // Decode
     uint8_t opcodeNib = instrCode >> 12; // instrCode[15:12] gives a general idea of the instrType
 
     uint16_t NNN = instrCode & 0x0FFF;
@@ -35,7 +34,7 @@ void CHIP8::emulateCycle()
     uint8_t Vy = (instrCode >> 4) & 0x00F;
 
     // std::cout << std::hex << int(PCReg) << " : " << std::setw(2) << std::setfill('0') << int(instrCode) << "   " << std::endl;
-    // std::cout << std::hex << "VF = " << int(VReg[VF]) << std::endl;
+
     switch (opcodeNib)
     {
     case 0x0:
@@ -226,6 +225,7 @@ void CHIP8::emulateCycle()
     case 0xD: // DRW Vx, Vy, nibble - Display a sprite starting at memory location I at (Vx, Vy), set VF = 1 on collision.
     {
         bool VFset = false;
+
         if (!CLIPPING_ENABLED)
         {
             for (int rowNum = 0; rowNum < N && (VReg[Vy] + rowNum < SCREEN_ROWS); rowNum++)
@@ -236,9 +236,18 @@ void CHIP8::emulateCycle()
                     uint8_t xCoord = VReg[Vx] + colNum;
                     uint8_t yCoord = VReg[Vy] + rowNum;
                     uint8_t screenWrite = (rowData >> (7 - colNum)) & 0x01;
+                    uint16_t coord1D = xCoord + yCoord * SCREEN_COLUMNS;
 
-                    VReg[VF] = (screen[xCoord + yCoord * SCREEN_COLUMNS] && screenWrite) ? 1 : 0; // Set flag if pixel Overwrite
-                    screen[xCoord + yCoord * SCREEN_COLUMNS] ^= screenWrite;
+                    if (screen[coord1D] == 1 && screenWrite == 1)
+                    {
+                        VFset = true;
+                        VReg[VF] = 1;
+                    }
+                    else
+                    {
+                        VReg[VF] = 0;
+                    }
+                    screen[coord1D] ^= screenWrite;
                 }
             }
         }
@@ -254,10 +263,9 @@ void CHIP8::emulateCycle()
                     uint8_t screenWrite = (rowData >> (7 - colNum)) & 0x01;
                     uint16_t coord1D = xCoord + yCoord * SCREEN_COLUMNS;
 
-                    // VReg[VF] = (screen[xCoord + yCoord * SCREEN_COLUMNS] && screenWrite) ? 1 : 0; // Set flag if pixel Overwrite
                     if (screen[coord1D] == 1 && screenWrite == 1)
                     {
-                        VFset = 1;
+                        VFset = true;
                         VReg[VF] = 1;
                     }
                     else
@@ -270,7 +278,6 @@ void CHIP8::emulateCycle()
         }
         if (VFset)
             VReg[VF] = 1;
-        // VReg[VF] = 0;
     }
     break;
     case 0xE:

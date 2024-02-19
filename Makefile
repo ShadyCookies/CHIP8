@@ -1,3 +1,4 @@
+
 src_files = src\display.cpp src\emulate.cpp src\init.cpp src\main.cpp
 libs = extern\SDL2\bin\SDL2.dll
 incl = -Iinclude -Iextern\SDL2\include
