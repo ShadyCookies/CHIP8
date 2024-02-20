@@ -9,6 +9,8 @@ Copy the entire project to a folder. Any ROM you wish to run must be in the .ch8
 ```cpp
   make run  
 ```
+The generated main.exe will be located in the bin/ folder.
+
 ### Sample Roms:
 - OctoJam Title:
 
