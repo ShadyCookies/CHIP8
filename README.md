@@ -1,6 +1,6 @@
 # CHIP8 Emulator
 
-CHIP8 Emulator developed in C++, with SDL2 for Graphics and Keyboard support. Currently does not support sound, but everything else should work fine!
+CHIP8 Emulator developed in C++, with SDL2 for Graphics and Keyboard support. Currently does not support sound, but everything else should work fine! Note: Runs only on windows systems.
 
 ### Running the Emulator:
 ----------------------
